@@ -1,6 +1,6 @@
 module github.com/francisco-teixeirax86/consensusforge
 
-go 1.25.1
+go 1.22
 
 require (
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
