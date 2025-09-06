@@ -1,4 +1,4 @@
-package consensusforge
+package main
 
 import (
 	"fmt"
