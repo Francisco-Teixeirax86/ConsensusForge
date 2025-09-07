@@ -2,26 +2,38 @@ package metrics
 
 import "time"
 
+// Metrics defines the interface for collecting consensus algorithm metrics
 type Metrics interface {
+	// Counter metrics
 	IncCounter(name string, labels ...Label)
 	AddCounter(name string, value float64, labels ...Label)
 
+	// Gauge metrics
 	SetGauge(name string, value float64, labels ...Label)
+
+	// Histogram metrics
 	RecordHistogram(name string, value float64, labels ...Label)
+
+	// Timer convenience method
 	RecordDuration(name string, duration time.Duration, labels ...Label)
+
+	// Create a timer that records when stopped
 	StartTimer(name string, labels ...Label) Timer
 }
 
+// Timer represents a running timer
 type Timer interface {
+	// Stop the timer and record the duration
 	Stop()
 }
 
-// Represents a metric label
+// Label represents a metric label
 type Label struct {
 	Name  string
 	Value string
 }
 
+// Helper functions for creating labels
 func NodeLabel(nodeID string) Label {
 	return Label{Name: "node_id", Value: nodeID}
 }
@@ -38,6 +50,7 @@ func CustomLabel(name, value string) Label {
 	return Label{Name: name, Value: value}
 }
 
+// Common metric names as constants
 const (
 	// Consensus metrics
 	MetricMessagesReceived = "consensus_messages_received_total"
