@@ -136,7 +136,12 @@ func (mt *MemoryTransport) Send(to string, msg consensus.Message) error {
 
 // Broadcast Implements the consensus.Transport
 func (mt *MemoryTransport) Broadcast(msg consensus.Message) error {
-	mt.mu.RLocker()
+	mt.mu.RLock()
+	if mt.closed {
+		mt.mu.RUnlock()
+		return fmt.Errorf("transport closed")
+	}
+
 	nodes := make([]string, 0, len(mt.nodes))
 	for nodeID := range mt.nodes {
 		if nodeID != mt.nodeID {

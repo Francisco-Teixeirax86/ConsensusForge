@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-// Represents the severity of a log message
+// LogLevel represents the severity of a log message
 type LogLevel int
 
 const (
-	LogDebug LogLevel = iota
+	LevelDebug LogLevel = iota
 	LevelInfo
 	LevelWarn
 	LevelError
@@ -18,7 +18,7 @@ const (
 
 func (l LogLevel) String() string {
 	switch l {
-	case LogDebug:
+	case LevelDebug:
 		return "DEBUG"
 	case LevelInfo:
 		return "INFO"
@@ -33,28 +33,37 @@ func (l LogLevel) String() string {
 	}
 }
 
-// Defines the interface for structured logging
+// Logger defines the interface for structured logging
 type Logger interface {
+	// Debug logs a debug message with optional fields
 	Debug(msg string, fields ...Field)
 
+	// Info logs an info message with optional fields
 	Info(msg string, fields ...Field)
 
+	// Warn logs a warning message with optional fields
 	Warn(msg string, fields ...Field)
 
+	// Error logs an error message with optional fields
 	Error(msg string, fields ...Field)
 
+	// Fatal logs a fatal message and exits
 	Fatal(msg string, fields ...Field)
 
+	// With returns a new logger with additional context fields
 	With(fields ...Field) Logger
 
+	// WithContext returns a new logger with context
 	WithContext(ctx context.Context) Logger
 }
 
+// Field represents a structured logging field
 type Field struct {
 	Key   string
 	Value interface{}
 }
 
+// Helper functions for creating fields
 func String(key, value string) Field {
 	return Field{Key: key, Value: value}
 }
